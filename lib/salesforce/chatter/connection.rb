@@ -1,7 +1,4 @@
-require 'faraday/request/salesforce_oauth'
-require 'faraday/response/raise_http_4xx'
-require 'faraday/response/raise_http_5xx'
-
+require "salesforce/chatter/middleware"
 module Salesforce::Chatter
   # @private
   module Connection
