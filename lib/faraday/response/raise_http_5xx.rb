@@ -1,5 +1,3 @@
-require 'faraday'
-
 # @private
 module Faraday
   # @private
@@ -7,11 +5,11 @@ module Faraday
     def on_complete(env)
       case env[:status].to_i
       when 500
-        raise SalesforceChatter::InternalServerError.new(error_message(env, "Something is technically wrong."), env[:response_headers])
+        raise Salesforce::Chatter::InternalServerError.new(error_message(env, "Something is technically wrong."), env[:response_headers])
       when 502
-        raise SalesforceChatter::BadGateway.new(error_message(env, "Something is technically wrong."), env[:response_headers])
+        raise Salesforce::Chatter::BadGateway.new(error_message(env, "Something is technically wrong."), env[:response_headers])
       when 503
-        raise SalesforceChatter::ServiceUnavailable.new(error_message(env, "Something is technically wrong."), env[:response_headers])
+        raise Salesforce::Chatter::ServiceUnavailable.new(error_message(env, "Something is technically wrong."), env[:response_headers])
       end
     end
 
@@ -22,3 +20,5 @@ module Faraday
     end
   end
 end
+
+Faraday::Middleware.register_middleware raise_http_5xx: Faraday::Response::RaiseHttp5xx

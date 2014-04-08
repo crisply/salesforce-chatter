@@ -1,14 +1,14 @@
-module SalesforceChatter
+module Salesforce::Chatter
 
   module Request
     def get(path, options={}, raw=false)
       request(:get, path, options, raw)
     end
-    
+
     def post(path, options={}, raw=false)
       request(:post, path, options, raw)
     end
-    
+
     private
 
     # Perform an HTTP request
@@ -26,7 +26,7 @@ module SalesforceChatter
     end
 
     def formatted_path(path)
-      SalesforceChatter.authenticated? ? File.join("/services/data/v22.0/", path) : path
+      File.join(chatter_version, path)
     end
   end
 end

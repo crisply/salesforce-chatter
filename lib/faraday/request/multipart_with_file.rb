@@ -1,5 +1,3 @@
-require 'faraday'
-
 # @private
 module Faraday
   # @private

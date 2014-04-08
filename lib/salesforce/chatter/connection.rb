@@ -1,11 +1,8 @@
-require 'faraday_middleware'
-require 'faraday/request/multipart_with_file'
-# require 'faraday/request/gateway'
 require 'faraday/request/salesforce_oauth'
 require 'faraday/response/raise_http_4xx'
 require 'faraday/response/raise_http_5xx'
 
-module SalesforceChatter
+module Salesforce::Chatter
   # @private
   module Connection
     private
@@ -19,13 +16,14 @@ module SalesforceChatter
       }
 
       Faraday.new(options) do |builder|
-        builder.use Faraday::Request::MultipartWithFile
-        builder.use Faraday::Request::SalesforceOAuth, authentication if authenticated?
-        builder.use Faraday::Request::Multipart
-        builder.use Faraday::Request::UrlEncoded
-        builder.use Faraday::Request::Gateway, gateway if gateway
-        builder.use Faraday::Response::RaiseHttp4xx
-        builder.use Faraday::Response::Logger
+        builder.use :salesforce_oauth, authentication if authenticated?
+        builder.request :multipart
+        builder.request :url_encoded
+        builder.response :logger
+        builder.use :raise_http_4xx
+        builder.use :raise_http_5xx
+
+=begin
         builder.use Faraday::Response::Mashify unless raw
         unless raw
           case format.to_s.downcase
@@ -35,7 +33,7 @@ module SalesforceChatter
             builder.use Faraday::Response::ParseXml
           end
         end
-        builder.use Faraday::Response::RaiseHttp5xx
+=end
         builder.adapter(adapter)
       end
     end

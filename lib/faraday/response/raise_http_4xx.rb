@@ -1,5 +1,3 @@
-require 'faraday'
-
 # @private
 module Faraday
   # @private
@@ -7,17 +5,17 @@ module Faraday
     def on_complete(env)
       case env[:status].to_i
       when 400
-        raise SalesforceChatter::BadRequest.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::BadRequest.new(error_message(env), env[:response_headers])
       when 401
-        raise SalesforceChatter::Unauthorized.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::Unauthorized.new(error_message(env), env[:response_headers])
       when 403
-        raise SalesforceChatter::Forbidden.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::Forbidden.new(error_message(env), env[:response_headers])
       when 404
-        raise SalesforceChatter::NotFound.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::NotFound.new(error_message(env), env[:response_headers])
       when 406
-        raise SalesforceChatter::NotAcceptable.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::NotAcceptable.new(error_message(env), env[:response_headers])
       when 420
-        raise SalesforceChatter::EnhanceYourCalm.new(error_message(env), env[:response_headers])
+        raise Salesforce::Chatter::EnhanceYourCalm.new(error_message(env), env[:response_headers])
       end
     end
 
@@ -43,3 +41,5 @@ module Faraday
     end
   end
 end
+
+Faraday::Middleware.register_middleware raise_http_4xx: Faraday::Response::RaiseHttp4xx

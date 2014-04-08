@@ -1,10 +1,7 @@
-require 'faraday'
-require 'salesforce-chatter/version'
-
-module SalesforceChatter
+module Salesforce::Chatter
   # Defines constants and methods related to configuration
   module Configuration
-    # An array of valid keys in the options hash when configuring a {SalesforceChatter::API}
+    # An array of valid keys in the options hash when configuring a {Salesforce::Chatter::API}
     VALID_OPTIONS_KEYS = [
       :adapter,
       :consumer_key,
@@ -13,13 +10,14 @@ module SalesforceChatter
       :format,
       :gateway,
       :oauth_token,
-      :oauth_token_secret,
+      :oauth_refresh_token,
       :proxy,
       :username,
       :password,
       :security_token,
-      :oauth_token,
-      :user_agent].freeze
+      :user_agent,
+      :chatter_version,
+    ].freeze
 
     # An array of valid request/response formats
     #
@@ -42,6 +40,8 @@ module SalesforceChatter
     # The endpoint that will be used to connect if none is set
     DEFAULT_ENDPOINT = 'https://login.salesforce.com/'.freeze
 
+    DEFAULT_CHATTER_VERSION = "/services/data/v30.0"
+
     # The response format appended to the path and sent in the 'Accept' header if none is set
     #
     # @note JSON is preferred over XML because it is more concise and faster to parse.
@@ -51,13 +51,13 @@ module SalesforceChatter
     DEFAULT_OAUTH_TOKEN = nil
 
     # By default, don't set a user oauth secret
-    DEFAULT_OAUTH_TOKEN_SECRET = nil
+    DEFAULT_OAUTH_REFRESH_TOKEN = nil
 
     # By default, don't use a proxy server
     DEFAULT_PROXY = nil
 
     # The user agent that will be sent to the API endpoint if none is set
-    DEFAULT_USER_AGENT = "SalesforceChatter Ruby Gem #{SalesforceChatter::VERSION}".freeze
+    DEFAULT_USER_AGENT = "Salesforce::Chatter Ruby Gem #{Salesforce::Chatter::VERSION}".freeze
 
     DEFAULT_GATEWAY = nil
 
@@ -83,16 +83,17 @@ module SalesforceChatter
 
     # Reset all configuration options to defaults
     def reset
-      self.adapter            = DEFAULT_ADAPTER
-      self.consumer_key       = DEFAULT_CONSUMER_KEY
-      self.consumer_secret    = DEFAULT_CONSUMER_SECRET
-      self.endpoint           = DEFAULT_ENDPOINT
-      self.format             = DEFAULT_FORMAT
-      self.oauth_token        = DEFAULT_OAUTH_TOKEN
-      self.oauth_token_secret = DEFAULT_OAUTH_TOKEN_SECRET
-      self.proxy              = DEFAULT_PROXY
-      self.user_agent         = DEFAULT_USER_AGENT
-      self.gateway            = DEFAULT_GATEWAY
+      self.adapter             = DEFAULT_ADAPTER
+      self.consumer_key        = DEFAULT_CONSUMER_KEY
+      self.consumer_secret     = DEFAULT_CONSUMER_SECRET
+      self.endpoint            = DEFAULT_ENDPOINT
+      self.format              = DEFAULT_FORMAT
+      self.oauth_token         = DEFAULT_OAUTH_TOKEN
+      self.oauth_refresh_token = DEFAULT_OAUTH_REFRESH_TOKEN
+      self.proxy               = DEFAULT_PROXY
+      self.user_agent          = DEFAULT_USER_AGENT
+      self.gateway             = DEFAULT_GATEWAY
+      self.chatter_version     = DEFAULT_CHATTER_VERSION
       self
     end
   end

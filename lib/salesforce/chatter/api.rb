@@ -1,8 +1,8 @@
-require 'salesforce-chatter/connection'
-require 'salesforce-chatter/request'
-require 'salesforce-chatter/authentication'
+require 'salesforce/chatter/connection'
+require 'salesforce/chatter/request'
+require 'salesforce/chatter/authentication'
 
-module SalesforceChatter
+module Salesforce::Chatter
   class API
 
     # @private
@@ -10,8 +10,7 @@ module SalesforceChatter
 
     # Creates a new API
     def initialize(options={})
-      self.oauth_token = options.delete :oauth_token
-      options = SalesforceChatter.options.merge(options)
+      options = Salesforce::Chatter.options.merge(options)
       Configuration::VALID_OPTIONS_KEYS.each do |key|
         send("#{key}=", options[key])
       end
