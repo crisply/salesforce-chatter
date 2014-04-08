@@ -18,6 +18,7 @@ module Salesforce::Chatter
         builder.request :url_encoded
         builder.response :logger
         builder.use :raise_http_4xx
+        builder.use :parse_json
         builder.use :raise_http_5xx
 
 =begin
