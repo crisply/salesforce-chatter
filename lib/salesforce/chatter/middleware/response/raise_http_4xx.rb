@@ -29,8 +29,8 @@ module Salesforce::Chatter::Middleware
       def error_body(body)
         if body.nil?
           nil
-        elsif body.is_a?(Array)
-          ": #{body[0]["message"]}"
+        elsif body.is_a?(Hash) && body.has_key?(:errors)
+          ": #{body[:errors].collect{|m| m[:message]}.join(", ")}"
         end
       end
     end

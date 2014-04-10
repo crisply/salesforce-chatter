@@ -1,4 +1,5 @@
 require "salesforce/chatter/middleware"
+
 module Salesforce::Chatter
   # @private
   module Connection
@@ -18,7 +19,7 @@ module Salesforce::Chatter
         builder.request :url_encoded
         builder.response :logger
         builder.use :raise_http_4xx
-        builder.use :parse_json
+        builder.use :parse_json unless raw
         builder.use :raise_http_5xx
         builder.adapter(adapter)
       end

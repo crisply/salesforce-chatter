@@ -11,7 +11,7 @@ describe Salesforce::Chatter::Middleware::Response::ParseJson do
     end
 
     resp = test.get "/test"
-    expect(resp.body).to be_instance_of(Hash)
+    expect(resp.body).to be_instance_of(Hashie::Mash)
     expect(resp.body["message"]).to eql("test body")
     expect(resp.body["errors"]["error_one"]).to eql("test error one")
   end
@@ -25,7 +25,7 @@ describe Salesforce::Chatter::Middleware::Response::ParseJson do
     end
 
     resp = test.get "/test"
-    expect(resp.body).to be_instance_of(Hash)
+    expect(resp.body).to be_instance_of(Hashie::Mash)
     expect(resp.body.empty?).to be_true
   end
 
