@@ -2,6 +2,45 @@ Salesforce Chatter Ruby Gem
 ===========================
 A Ruby wrapper for the Salesforce Chatter REST API
 
+Usage
+=====
+
+## Instantiating a Client
+
+### With OAuth Tokens
+
+```ruby
+client = Salesforce::Chatter.new(
+  endpoint: <instance_url>,
+  token:    <oauth_token>,
+  refresh_token: <oauth_refresh_token>,
+  client_id: <client_id>,
+  client_secret: <client_secret>,
+)
+# If you need to refresh your token...
+client.refresh_token!
+```
+
+### With a password grant
+
+```ruby
+client = Salesforce::Chatter.new(
+  username: <username>,
+  password: <password>,
+  security_token: <security_token>,
+  client_id: <client_id>,
+  client_secret: <client_secret>,
+)
+client.authenticate_with_user!
+```
+
+## FeedItems
+
+```ruby
+# Get your FeedItems
+items = client.feed_items
+```
+
 
 Contributing to salesforce-chatter
 ==================================
