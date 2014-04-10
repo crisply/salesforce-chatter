@@ -11,6 +11,7 @@ module Salesforce::Chatter::Middleware
         if client.token
           env.request_headers["Authorization"] = "OAuth #{client.token}"
         end
+        @app.call(env)
       end
 
     end
