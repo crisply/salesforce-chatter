@@ -1,12 +1,10 @@
 require 'yajl'
-require 'hashie'
 require 'oauth2'
 require 'faraday'
 
 require 'salesforce/chatter/version'
 require 'salesforce/chatter/errors'
 require 'salesforce/chatter/configuration'
-require 'salesforce/chatter/api'
 require 'salesforce/chatter/client'
 
 module Salesforce

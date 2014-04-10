@@ -4,13 +4,12 @@ module Salesforce::Chatter
     # An array of valid keys in the options hash when configuring a {Salesforce::Chatter::API}
     VALID_OPTIONS_KEYS = [
       :adapter,
-      :consumer_key,
-      :consumer_secret,
+      :client_id,
+      :client_secret,
       :endpoint,
       :format,
-      :gateway,
-      :oauth_token,
-      :oauth_refresh_token,
+      :token,
+      :refresh_token,
       :proxy,
       :username,
       :password,
@@ -32,15 +31,16 @@ module Salesforce::Chatter
     DEFAULT_ADAPTER = Faraday.default_adapter
 
     # By default, don't set an application key
-    DEFAULT_CONSUMER_KEY = nil
+    DEFAULT_CLIENT_KEY = nil
 
     # By default, don't set an application secret
-    DEFAULT_CONSUMER_SECRET = nil
+    DEFAULT_CLIENT_SECRET = nil
 
     # The endpoint that will be used to connect if none is set
     DEFAULT_ENDPOINT = 'https://login.salesforce.com/'.freeze
-
-    DEFAULT_CHATTER_VERSION = "/services/data/v30.0"
+    AUTHORIZE_PATH   = "/services/oauth2/authorize".freeze
+    TOKEN_PATH       = "/services/oauth2/token".freeze
+    DEFAULT_CHATTER_VERSION = "/services/data/v30.0".freeze
 
     # The response format appended to the path and sent in the 'Accept' header if none is set
     #
@@ -58,8 +58,6 @@ module Salesforce::Chatter
 
     # The user agent that will be sent to the API endpoint if none is set
     DEFAULT_USER_AGENT = "Salesforce::Chatter Ruby Gem #{Salesforce::Chatter::VERSION}".freeze
-
-    DEFAULT_GATEWAY = nil
 
     # @private
     attr_accessor *VALID_OPTIONS_KEYS
@@ -84,15 +82,14 @@ module Salesforce::Chatter
     # Reset all configuration options to defaults
     def reset
       self.adapter             = DEFAULT_ADAPTER
-      self.consumer_key        = DEFAULT_CONSUMER_KEY
-      self.consumer_secret     = DEFAULT_CONSUMER_SECRET
+      self.client_id           = DEFAULT_CLIENT_KEY
+      self.client_secret       = DEFAULT_CLIENT_SECRET
       self.endpoint            = DEFAULT_ENDPOINT
       self.format              = DEFAULT_FORMAT
-      self.oauth_token         = DEFAULT_OAUTH_TOKEN
-      self.oauth_refresh_token = DEFAULT_OAUTH_REFRESH_TOKEN
+      self.token               = DEFAULT_OAUTH_TOKEN
+      self.refresh_token       = DEFAULT_OAUTH_REFRESH_TOKEN
       self.proxy               = DEFAULT_PROXY
       self.user_agent          = DEFAULT_USER_AGENT
-      self.gateway             = DEFAULT_GATEWAY
       self.chatter_version     = DEFAULT_CHATTER_VERSION
       self
     end

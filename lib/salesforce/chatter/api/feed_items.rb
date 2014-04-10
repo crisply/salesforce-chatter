@@ -1,5 +1,5 @@
 module Salesforce::Chatter
-  class Client
+  module API
     # Defines methods related to feed items
     module FeedItems
       def feed_items(*args)

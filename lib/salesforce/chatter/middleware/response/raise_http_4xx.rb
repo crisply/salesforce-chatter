@@ -29,15 +29,8 @@ module Salesforce::Chatter::Middleware
       def error_body(body)
         if body.nil?
           nil
-        elsif body['error']
-          ": #{body['error']}"
-        elsif body['errors']
-          first = Array(body['errors']).first
-          if first.kind_of? Hash
-            ": #{first['message'].chomp}"
-          else
-            ": #{first.chomp}"
-          end
+        elsif body.is_a?(Array)
+          ": #{body[0]["message"]}"
         end
       end
     end

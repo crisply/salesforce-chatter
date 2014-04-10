@@ -1,19 +1,18 @@
 module Salesforce::Chatter::Middleware
   module Request
     class SalesforceOAuth < ::Faraday::Middleware
+      attr_reader :client
+
+      def initialize(app, client)
+        @app, @client = app, client
+      end
+
       def call(env)
-        if options.has_key?(:token)
-          env.request_headers["Authorization"] = "OAuth #{options[:token]}"
+        if client.token
+          env.request_headers["Authorization"] = "OAuth #{client.token}"
         end
-
-        @app.call(env)
       end
 
-      attr_reader :options
-
-      def initialize(app, options)
-        @app, @options = app, options
-      end
     end
   end
 end

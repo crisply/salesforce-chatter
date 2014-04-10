@@ -7,31 +7,19 @@ module Salesforce::Chatter
     def connection(raw=false)
       options = {
         :headers => {'Accept' => "application/#{format}", 'User-Agent' => user_agent},
-        :proxy => proxy,
-        :ssl => {:verify => false},
-        :url => api_endpoint,
+        :proxy   => proxy,
+        :ssl     => {:verify => false},
+        :url     => endpoint,
       }
 
       Faraday.new(options) do |builder|
-        builder.use :salesforce_oauth, authentication if authenticated?
+        builder.use :salesforce_oauth, self if authenticated?
         builder.request :multipart
         builder.request :url_encoded
         builder.response :logger
         builder.use :raise_http_4xx
         builder.use :parse_json
         builder.use :raise_http_5xx
-
-=begin
-        builder.use Faraday::Response::Mashify unless raw
-        unless raw
-          case format.to_s.downcase
-          when 'json'
-            builder.use Faraday::Response::ParseJson
-          when 'xml'
-            builder.use Faraday::Response::ParseXml
-          end
-        end
-=end
         builder.adapter(adapter)
       end
     end
