@@ -59,4 +59,5 @@ The design for this project was based on the [Twitter](https://github.com/jnunem
 Copyright
 =========
 Copyright (c) 2011 Dylan Vaughn. See LICENSE.txt for further details.
+
 Copyright (c) 2014 Dan Wanek. See LICENSE.txt for further details.
