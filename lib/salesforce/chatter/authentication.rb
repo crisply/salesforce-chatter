@@ -2,29 +2,54 @@ module Salesforce::Chatter
 
   module Authentication
 
-    def authenticate(options={})
-      options[:client_id]     = Salesforce::Chatter.consumer_key
-      options[:client_secret] = Salesforce::Chatter.consumer_secret
-      options[:username]      = Salesforce::Chatter.username
-      options[:password]      = Salesforce::Chatter.password + Salesforce::Chatter.security_token
-      options[:grant_type]    = 'password'
-
-      response = post('services/oauth2/token', options)
-      Salesforce::Chatter.oauth_token = response.access_token
-      response
+    def authenticate_with_user!
+      begin
+        resp = oauth2_client.password.get_token username,"#{password}#{security_token}"
+        self.token         = resp.token
+        self.refresh_token = resp.refresh_token
+        self.endpoint      = resp.params["instance_url"]
+        true
+      rescue OAuth2::Error => e
+        raise AuthenticationError, "#{e.description}: #{e.code}"
+      end
     end
 
-    def authentication
-      {
-        consumer_key:     consumer_key,
-        consumer_secret:  consumer_secret,
-        token:            oauth_token,
-        refresh_token:    oauth_refresh_token
-      }
+    def refresh_token!
+      begin
+        resp = oauth2_access_token.refresh!
+        self.token         = resp.token
+        self.refresh_token = resp.refresh_token
+        self.endpoint      = resp.params["instance_url"]
+        true
+      rescue OAuth2::Error => e
+        raise AuthenticationError, "#{e.description}: #{e.code}"
+      rescue RuntimeError => e
+        if e.message =~ /A refresh_token is not available/
+          raise AuthenticationError, e.message
+        else
+          raise
+        end
+      end
     end
 
     def authenticated?
-      !oauth_token.nil?
+      !(token.nil? || token.empty?)
+    end
+
+
+    private
+
+
+    def oauth2_client
+      @oauth2_client ||= OAuth2::Client.new(
+        client_id, client_secret,
+        site:          Configuration::DEFAULT_ENDPOINT,
+        authorize_url: Configuration::AUTHORIZE_PATH,
+        token_url:     Configuration::TOKEN_PATH)
+    end
+
+    def oauth2_access_token
+      OAuth2::AccessToken.new(oauth2_client, token, refresh_token: refresh_token)
     end
 
   end

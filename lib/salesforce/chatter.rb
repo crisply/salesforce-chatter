@@ -1,6 +1,6 @@
 require 'yajl'
 require 'hashie'
-require 'simple_oauth'
+require 'oauth2'
 require 'faraday'
 
 require 'salesforce/chatter/version'

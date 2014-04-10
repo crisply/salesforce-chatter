@@ -1,6 +1,8 @@
 module Salesforce::Chatter
   class Error < ::Exception; end
 
+  class AuthenticationError < Error; end
+
   class HTTPError < Error
     attr_reader :response_headers
 
