@@ -26,7 +26,11 @@ module Salesforce::Chatter
     end
 
     def formatted_path(path)
-      File.join(chatter_version, path)
+      if path =~ /\/services\/data\/v/
+        path
+      else
+        File.join(chatter_version, path)
+      end
     end
   end
 end
